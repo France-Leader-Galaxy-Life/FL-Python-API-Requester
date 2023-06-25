@@ -1,8 +1,8 @@
 # Intallation
 
-``
+```
 pip install fl-api-requester
-``
+```
 
 # Usage
 
