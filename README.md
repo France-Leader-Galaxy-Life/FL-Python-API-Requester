@@ -7,7 +7,7 @@ pip install fl-api-requester
 # Usage
 
 ```python
-from fl_api_requester
+from fl_api_requester import *
 
 connection_data = FLAPIConnectionData()
 connection_data.set_credentials("username", "password")
