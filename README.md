@@ -1,4 +1,4 @@
-# Intallation
+# Installation
 
 ```
 pip install fl-api-requester
