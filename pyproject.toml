@@ -4,11 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fl-api-requester"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
     { name="FL-GL", email="franceleadergl@gmail.com" }
 ]
 description = "The France Leader API requester."
+readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -20,4 +21,4 @@ dependencies=[
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
+"Homepage" = "https://github.com/France-Leader-Galaxy-Life/FL-Python-API-Requester"
