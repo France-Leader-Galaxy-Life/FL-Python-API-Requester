@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fl-api-requester"
+version = "1.0.0"
+authors = [
+    { name="FL-GL", email="franceleadergl@gmail.com" }
+]
+description = "The France Leader API requester."
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies=[
+    "munch", "requests"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
