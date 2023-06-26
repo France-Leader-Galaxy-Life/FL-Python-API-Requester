@@ -1,9 +1,10 @@
+from dataclasses import dataclass
 from ...DTO import DTO
 
+@dataclass
 class StartWarDTO(DTO):
     """
     Request made to start a war.
     """
 
-    def __init__(self, alliance: str) -> None:
-        self.alliance = alliance
+    alliance: str

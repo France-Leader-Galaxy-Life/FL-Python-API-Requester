@@ -1,10 +1,11 @@
+from dataclasses import dataclass
 from ...DTO import DTO
 
+@dataclass
 class RemovePlanetDTO(DTO):
     """
     Request sent to remove a planet from a player.
     """
 
-    def __init__(self, player: str, label: str) -> None:
-        self.player = player
-        self.label = label
+    player: str
+    label: str

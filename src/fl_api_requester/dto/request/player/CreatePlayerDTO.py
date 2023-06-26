@@ -1,9 +1,10 @@
+from dataclasses import dataclass
 from ...DTO import DTO
 
+@dataclass
 class CreatePlayerDTO(DTO):
     """
     Player creation request.
     """
 
-    def __init__(self, nickname: str) -> None:
-        self.nickname = nickname
+    nickname: str

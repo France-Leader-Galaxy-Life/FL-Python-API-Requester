@@ -1,14 +1,20 @@
+from dataclasses import dataclass
+from datetime import datetime
 from ...DTO import DTO
 from ...response.player.PlayerDTO import PlayerDTO
 from ...response.war.WarDTO import WarDTO
 
+@dataclass
 class WarAttackResponseDTO(DTO):
     """
     An attack made during a war.
     """
 
-    def __init__(self, war: WarDTO, attacker: PlayerDTO, defender: str, attackedPlanet: str) -> None:
-        self.war = war
-        self.attacker = attacker
-        self.defender = defender
-        self.attacked_planet = attackedPlanet
+    war: WarDTO
+    attacker: PlayerDTO
+    defender: str
+    attackedPlanet: str
+    timestamp: int
+
+    def timestamp_to_datetime(self) -> datetime:
+        return datetime.fromtimestamp(float(self.timestamp) / 1000)

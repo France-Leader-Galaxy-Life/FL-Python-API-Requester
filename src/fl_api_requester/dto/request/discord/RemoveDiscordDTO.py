@@ -1,10 +1,11 @@
+from dataclasses import dataclass
 from typing import List
 from ...DTO import DTO
 
+@dataclass
 class RemoveDiscordDTO(DTO):
     """
     Request sent to remove a Discord server.
     """
 
-    def __init__(self, discordId: int) -> None:
-        self.discordId = discordId
+    discord_id: int

@@ -1,10 +1,11 @@
+from dataclasses import dataclass
 from ...DTO import DTO
 
+@dataclass
 class AuthenticationRequestDTO(DTO):
     """
     Represents a login request.
     """
 
-    def __init__(self, login: str, password: str) -> None:
-        self.login = login
-        self.password = password
+    login: str
+    password: str
