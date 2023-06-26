@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 from dacite import from_dict
 import requests
 
@@ -34,186 +34,140 @@ class FLAPIRequester:
     The France Leader API requester.
     """
 
-    """
-    The France Leader API URI.
-    """
-    FL_API_URI: str = "http://51.210.254.14:8080"
-
-    def __init__(self) -> None:
-        ...
+    def __init__(self, connection_data: FLAPIConnectionData) -> None:
+        self.connection_data = connection_data
 
     ##################
     # Authentication #
     ##################
 
-    def login(self, connection_data: FLAPIConnectionData) -> AuthenticationResponseDTO:
-        (login, password) = connection_data.get_credentials()
-        return from_dict(
+    def login(self) -> AuthenticationResponseDTO:
+        (login, password) = self.connection_data.get_credentials()
+        response = from_dict(
             AuthenticationResponseDTO, 
-            self._send_post_request("/login", AuthenticationRequestDTO(login, password), connection_data)
+            self.__send_request("/login", "POST", AuthenticationRequestDTO(login, password))
         )
+        self.connection_data.token = response.token
     
     ############
     # Alliance #
     ############
 
-    def get_alliance(self, name: str, connection_data: FLAPIConnectionData) -> AllianceDTO:
-        return from_dict(AllianceDTO, self._send_get_request(f"/alliance/get/{name}", connection_data))
+    def get_alliance(self, name: str) -> AllianceDTO:
+        return from_dict(AllianceDTO, self.__send_request(f"/alliance/get/{name}"))
     
-    def create_alliance(self, alliance_data: CreateAllianceDTO, connection_data: FLAPIConnectionData) -> AllianceDTO:
-        return from_dict(AllianceDTO, self._send_post_request("/alliance/create", alliance_data, connection_data))
+    def create_alliance(self, alliance_data: CreateAllianceDTO) -> AllianceDTO:
+        return from_dict(AllianceDTO, self.__send_request("/alliance/create", "POST", alliance_data))
     
-    def remove_alliance(self, alliance_data: RemoveAllianceDTO, connection_data: FLAPIConnectionData) -> AllianceDTO:
-        return from_dict(AllianceDTO, self._send_delete_request("/alliance/remove", alliance_data, connection_data))
+    def remove_alliance(self, alliance_data: RemoveAllianceDTO) -> AllianceDTO:
+        return from_dict(AllianceDTO, self.__send_request("/alliance/remove", "DELETE", alliance_data))
 
     ##########
     # Player #
     ##########
 
-    def get_player(self, nickname: str, connection_data: FLAPIConnectionData) -> PlayerDTO:
-        return from_dict(PlayerDTO, self._send_get_request(f"/player/get/{nickname}", connection_data))
+    def get_player(self, nickname: str) -> PlayerDTO:
+        return from_dict(PlayerDTO, self.__send_request(f"/player/get/{nickname}"))
     
-    def create_player(self, player_data: CreatePlayerDTO, connection_data: FLAPIConnectionData) -> PlayerDTO:
-        return from_dict(PlayerDTO, self._send_post_request("/player/create", player_data, connection_data))
+    def create_player(self, player_data: CreatePlayerDTO) -> PlayerDTO:
+        return from_dict(PlayerDTO, self.__send_request("/player/create", "POST", player_data))
     
-    def set_player_alliance(self, player_data: SetAllianceDTO, connection_data: FLAPIConnectionData) -> PlayerDTO:
-        return from_dict(PlayerDTO, self._send_post_request("/player/set-alliance", player_data, connection_data))
+    def set_player_alliance(self, player_data: SetAllianceDTO) -> PlayerDTO:
+        return from_dict(PlayerDTO, self.__send_request("/player/set-alliance", "POST", player_data))
     
-    def set_player_roles(self, player_data: SetPlayerRolesDTO, connection_data: FLAPIConnectionData) -> PlayerDTO:
-        return from_dict(PlayerDTO, self._send_post_request("/player/set-roles", player_data, connection_data))
+    def set_player_roles(self, player_data: SetPlayerRolesDTO) -> PlayerDTO:
+        return from_dict(PlayerDTO, self.__send_request("/player/set-roles", "POST", player_data))
     
-    def remove_player(self, player_data: RemovePlayerDTO, connection_data: FLAPIConnectionData) -> PlayerDTO:
-        return from_dict(PlayerDTO, self._send_delete_request("/player/remove", player_data, connection_data))
+    def remove_player(self, player_data: RemovePlayerDTO) -> PlayerDTO:
+        return from_dict(PlayerDTO, self.__send_request("/player/remove", "DELETE", player_data))
 
     ##########
     # Planet #
     ##########
 
-    def get_planet(self, nickname: str, label: str, connection_data: FLAPIConnectionData) -> List[PlanetDTO]:
+    def get_planet(self, nickname: str, label: str) -> List[PlanetDTO]:
         return [
             from_dict(PlanetDTO, planet) 
-            for planet in self._send_get_request(f"/planet/get/{nickname}/{label}", connection_data)
+            for planet in self.__send_request(f"/planet/get/{nickname}/{label}")
         ]
     
-    def add_planet(self, planet_data: AddPlanetDTO, connection_data: FLAPIConnectionData) -> PlanetDTO:
-        return from_dict(PlanetDTO, self._send_post_request("/planet/add", planet_data, connection_data))
+    def add_planet(self, planet_data: AddPlanetDTO) -> PlanetDTO:
+        return from_dict(PlanetDTO, self.__send_request("/planet/add", "POST", planet_data))
     
-    def remove_planet(self, planet_data: RemovePlanetDTO, connection_data: FLAPIConnectionData) -> PlanetDTO:
-        return from_dict(PlanetDTO, self._send_delete_request("/planet/remove", planet_data, connection_data))
+    def remove_planet(self, planet_data: RemovePlanetDTO) -> PlanetDTO:
+        return from_dict(PlanetDTO, self.__send_request("/planet/remove", "DELETE", planet_data))
     
-    def remove_specific_planet(
-        self, 
-        planet_data: RemoveSpecificPlanetDTO, 
-        connection_data: FLAPIConnectionData
-    ) -> PlanetDTO:
-        return from_dict(PlanetDTO, self._send_delete_request("/planet/specific-remove", planet_data, connection_data))
+    def remove_specific_planet(self, planet_data: RemoveSpecificPlanetDTO) -> PlanetDTO:
+        return from_dict(PlanetDTO, self.__send_request("/planet/specific-remove", "DELETE", planet_data))
 
     #######
     # War #
     #######
 
-    def get_war(self, alliance: str, connection_data: FLAPIConnectionData) -> WarDTO:
-        return from_dict(WarDTO, self._send_get_request(f"/war/get/{alliance}", connection_data))
+    def get_war(self, alliance: str) -> WarDTO:
+        return from_dict(WarDTO, self.__send_request(f"/war/get/{alliance}"))
     
-    def start_war(self, war_data: StartWarDTO, connection_data: FLAPIConnectionData) -> WarDTO:
-        return from_dict(WarDTO, self._send_post_request("/war/start", war_data, connection_data))
+    def start_war(self, war_data: StartWarDTO) -> WarDTO:
+        return from_dict(WarDTO, self.__send_request("/war/start", "POST", war_data))
     
-    def stop_war(self, war_data: StopWarDTO, connection_data: FLAPIConnectionData) -> WarDTO:
-        return from_dict(WarDTO, self._send_post_request("/war/stop", war_data, connection_data))
+    def stop_war(self, war_data: StopWarDTO) -> WarDTO:
+        return from_dict(WarDTO, self.__send_request("/war/stop", "POST", war_data))
     
-    def attack(self, attack_data: WarAttackRequestDTO, connection_data: FLAPIConnectionData) -> WarAttackResponseDTO:
-        return from_dict(WarAttackResponseDTO, self._send_post_request("/war/attack", attack_data, connection_data))
+    def attack(self, attack_data: WarAttackRequestDTO) -> WarAttackResponseDTO:
+        return from_dict(WarAttackResponseDTO, self.__send_request("/war/attack", "POST", attack_data))
     
-    def get_player_attacks(self, nickname: str, connection_data: FLAPIConnectionData) -> List[WarAttackResponseDTO]:
+    def get_player_attacks(self, nickname: str) -> List[WarAttackResponseDTO]:
         return [
             from_dict(WarAttackResponseDTO, attack) 
-            for attack in self._send_get_request(f"/war/attacks/{nickname}", connection_data)
+            for attack in self.__send_request(f"/war/attacks/{nickname}")
         ]
 
     ###########
     # Discord #
     ###########
 
-    def get_discord_alliances(self, discord_id: int, connection_data: FLAPIConnectionData) -> List[AllianceDTO]:
+    def get_discord_alliances(self, discord_id: int) -> List[AllianceDTO]:
         return [
             from_dict(AllianceDTO, alliance) 
-            for alliance in self._send_get_request(f"/discord/{discord_id}/alliances", connection_data)
+            for alliance in self._send_get_request(f"/discord/{discord_id}/alliances")
         ]
     
-    def create_discord(self, discord_data: CreateDiscordDTO, connection_data: FLAPIConnectionData) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_post_request("/discord/create", discord_data, connection_data))
+    def create_discord(self, discord_data: CreateDiscordDTO) -> DiscordDTO:
+        return from_dict(DiscordDTO, self._send_post_request("/discord/create", "POST", discord_data))
 
-    def add_alliance_to_discord(
-        self, 
-        discord_data: AddAllianceToDiscordDTO, 
-        connection_data: FLAPIConnectionData
-    ) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_post_request("/discord/add-alliance", discord_data, connection_data))
+    def add_alliance_to_discord(self, discord_data: AddAllianceToDiscordDTO) -> DiscordDTO:
+        return from_dict(DiscordDTO, self._send_post_request("/discord/add-alliance", "POST", discord_data))
 
-    def remove_discord(self, discord_data: RemoveDiscordDTO, connection_data: FLAPIConnectionData) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_delete_request("/discord/remove", discord_data, connection_data))
+    def remove_discord(self, discord_data: RemoveDiscordDTO) -> DiscordDTO:
+        return from_dict(DiscordDTO, self._send_delete_request("/discord/remove", "DELETE", discord_data))
+
+    #######################
+    # Getters and setters #
+    #######################
+
+    def get_connection_data(self) -> FLAPIConnectionData:
+        return self.connection_data
+    
+    def set_connection_data(self, connection_data: FLAPIConnectionData) -> None:
+        self.connection_data = connection_data
 
     ###################
     # Private methods #
     ###################
 
-    def _send_get_request(self, endpoint: str, connection_data: FLAPIConnectionData) -> DTO:
+    def __send_request(self, endpoint: str, method: str = "GET", data: DTO = None) -> Dict:
+        # Determine the function to use depending on the method
+        match method:
+            case "GET": send_request_method = requests.get
+            case "POST": send_request_method = requests.post
+            case "DELETE": send_request_method = requests.delete
+            case other: raise "Invalid HTTP method (use GET, POST or DELETE)"
+
         # Send the request
-        token = connection_data.get_token()
-        discord_id = connection_data.get_discord_id()
-        response = requests.get(
-            f"{self.FL_API_URI}{endpoint}",
-            headers = {
-                "Authorization": None if token == None else f"Bearer {token}",
-                "X-From-Discord": None if discord_id == None else f"{discord_id}"
-            }
-        )
-        json_response = response.json()
-
-        # Check the error
-        if response.status_code >= 400:
-            raise APIErrorException("An API error occured.", json_response)
-
-        # Parse the JSON dictionnary to an object
-        return json_response
-    
-    def _send_post_request(
-        self,
-        endpoint: str,
-        data: DTO, 
-        connection_data: FLAPIConnectionData
-    ) -> DTO:        
-        # Send the request
-        token = connection_data.get_token()
-        discord_id = connection_data.get_discord_id()
-        response = requests.post(
-            f"{self.FL_API_URI}{endpoint}",
-            headers = {
-                "Authorization": None if token == None else f"Bearer {token}",
-                "X-From-Discord": None if discord_id == None else f"{discord_id}"
-            },
-            json = None if data == None else data.__dict__
-        )
-        json_response = response.json()
-
-        # Check the error
-        if response.status_code >= 400:
-            raise APIErrorException("An API error occured.", json_response)
-
-        # Parse the JSON dictionnary to an object
-        return json_response
-    
-    def _send_delete_request(
-        self,
-        endpoint: str,
-        data: DTO, 
-        connection_data: FLAPIConnectionData
-    ) -> DTO:        
-        # Send the request
-        token = connection_data.get_token()
-        discord_id = connection_data.get_discord_id()
-        response = requests.delete(
-            f"{self.FL_API_URI}{endpoint}",
+        token = self.connection_data.get_token()
+        discord_id = self.connection_data.get_discord_id()
+        response = send_request_method(
+            f"{self.connection_data.api_uri}{endpoint}",
             headers = {
                 "Authorization": None if token == None else f"Bearer {token}",
                 "X-From-Discord": None if discord_id == None else f"{discord_id}"

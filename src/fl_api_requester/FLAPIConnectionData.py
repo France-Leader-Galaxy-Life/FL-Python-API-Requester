@@ -4,10 +4,17 @@ class FLAPIConnectionData:
     """
 
     def __init__(self) -> None:
+        self.api_uri = None
         self.username = None
         self.password = None
         self.token = None
         self.discord_id = None
+
+    def get_api_uri(self) -> str:
+        """
+        Returns the defined API URI.
+        """
+        return self.api_uri
 
     def get_credentials(self) -> tuple[str, str]:
         """
@@ -27,6 +34,17 @@ class FLAPIConnectionData:
         Returns the Discord server's ID that make the request. Returns None if the ID hasn't been set.
         """
         return self.discord_id
+
+    def set_api_uri(self, api_uri: str) -> None:
+        """
+        Set the API URI.
+
+        Parameters
+        ----------
+        - api_uri: `str`
+            The API URI to define.
+        """
+        self.api_uri = api_uri
 
     def set_credentials(self, username: str, password: str) -> None:
         """
