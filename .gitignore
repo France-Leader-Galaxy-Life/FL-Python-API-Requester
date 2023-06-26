@@ -1,5 +1,7 @@
 dist
 fl_api_requester.egg-info
+todo.txt
+src/main.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
