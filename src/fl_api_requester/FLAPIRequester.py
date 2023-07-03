@@ -4,6 +4,8 @@ import requests
 
 from . import FLAPIConnectionData
 from .dto.DTO import DTO
+from .dto.request.discord.AddChannelsToDiscordDTO import AddChannelsToDiscordDTO
+from .dto.request.discord.RemoveChannelsFromDiscordDTO import RemoveChannelsFromDiscordDTO
 from .dto.request.alliance.CreateAllianceDTO import CreateAllianceDTO
 from .dto.request.alliance.RemoveAllianceDTO import RemoveAllianceDTO
 from .dto.request.authentication.AuthenticationRequestDTO import AuthenticationRequestDTO
@@ -133,13 +135,19 @@ class FLAPIRequester:
         ]
     
     def create_discord(self, discord_data: CreateDiscordDTO) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_post_request("/discord/create", "POST", discord_data))
+        return from_dict(DiscordDTO, self.__send_request("/discord/create", "POST", discord_data))
 
     def add_alliance_to_discord(self, discord_data: AddAllianceToDiscordDTO) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_post_request("/discord/add-alliance", "POST", discord_data))
+        return from_dict(DiscordDTO, self.__send_request("/discord/add-alliance", "POST", discord_data))
+
+    def add_discord_channels(self, channels_data: AddChannelsToDiscordDTO) -> DiscordDTO:
+        return from_dict(DiscordDTO, self.__send_request("/discord/add-channel", "POST", channels_data))
+    
+    def remove_discord_channels(self, channels_data: RemoveChannelsFromDiscordDTO) -> DiscordDTO:
+        return from_dict(DiscordDTO, self.__send_request("/discord/remove-channel", "DELETE", channels_data))
 
     def remove_discord(self, discord_data: RemoveDiscordDTO) -> DiscordDTO:
-        return from_dict(DiscordDTO, self._send_delete_request("/discord/remove", "DELETE", discord_data))
+        return from_dict(DiscordDTO, self.__send_request("/discord/remove", "DELETE", discord_data))
 
     #######################
     # Getters and setters #
