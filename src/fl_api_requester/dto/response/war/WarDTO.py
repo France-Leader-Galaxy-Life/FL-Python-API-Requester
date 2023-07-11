@@ -14,7 +14,7 @@ class WarDTO(DTO):
     alliancePoints: int 
     opponentPoints: int 
     status: str
-    timestamp: int
+    startTimestamp: int
 
     def timestamp_to_datetime(self) -> datetime:
-        return datetime.fromtimestamp(float(self.timestamp) / 1000)
+        return datetime.fromtimestamp(float(self.startTimestamp) / 1000)

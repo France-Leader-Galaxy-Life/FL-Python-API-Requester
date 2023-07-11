@@ -130,7 +130,7 @@ class FLAPIRequester:
 
     def get_discord(self, discord_id: int) -> DiscordDTO:
         return [
-            from_dict(AllianceDTO, alliance) 
+            from_dict(DiscordDTO, alliance) 
             for alliance in self.__send_request(f"/discord/get/{discord_id}")
         ]
     
