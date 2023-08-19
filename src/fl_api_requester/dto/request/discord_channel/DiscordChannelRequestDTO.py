@@ -9,3 +9,4 @@ class DiscordChannelRequestDTO(DTO):
 
     id: int
     type: str
+    allianceId: int
