@@ -129,10 +129,7 @@ class FLAPIRequester:
     ###########
 
     def get_discord(self, discord_id: int) -> DiscordDTO:
-        return [
-            from_dict(DiscordDTO, alliance) 
-            for alliance in self.__send_request(f"/discord/get/{discord_id}")
-        ]
+        return from_dict(DiscordDTO, self.__send_request(f"/discord/get/{discord_id}"))
     
     def create_discord(self, discord_data: CreateDiscordDTO) -> DiscordDTO:
         return from_dict(DiscordDTO, self.__send_request("/discord/create", "POST", discord_data))

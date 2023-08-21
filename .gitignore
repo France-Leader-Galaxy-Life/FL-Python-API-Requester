@@ -3,6 +3,10 @@ fl_api_requester.egg-info
 todo.txt
 src/main.py
 
+# Virtual env var
+
+venv/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
