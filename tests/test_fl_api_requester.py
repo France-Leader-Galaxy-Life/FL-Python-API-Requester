@@ -59,3 +59,15 @@ def test_get_planet_FAILED_nickname(api_requester):
 	with pytest.raises(APIErrorException):
 		response = api_requester.get_planet(nickname="galactipaladium",label="c1")
 	
+
+		###########
+		# Discord #
+		###########
+
+def test_get_discord_PASSED(api_requester):
+	response = api_requester.get_discord(discord_id="1012059930695573605")
+	assert response is not APIErrorException
+
+def test_get_discord_FAILED(api_requester):
+	with pytest.raises(APIErrorException):
+		response = api_requester.get_discord(discord_id="643521984651")
