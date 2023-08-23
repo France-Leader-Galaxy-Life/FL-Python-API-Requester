@@ -12,4 +12,4 @@ class DiscordDTO(DTO):
 
     id: int
     alliances: List[AllianceDTO]
-    channel: List[DiscordChannelResponseDTO]
+    channels: List[DiscordChannelResponseDTO]

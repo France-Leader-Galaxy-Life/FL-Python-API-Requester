@@ -6,6 +6,7 @@ src/main.py
 # Virtual env var
 
 venv/
+.env.local
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
