@@ -9,4 +9,4 @@ class WarAttackRequestDTO(DTO):
 
     attacker: str
     defender: str
-    planet_label: str
+    planetLabel: str

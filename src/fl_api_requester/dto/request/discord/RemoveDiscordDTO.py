@@ -8,4 +8,4 @@ class RemoveDiscordDTO(DTO):
     Request sent to remove a Discord server.
     """
 
-    discord_id: int
+    discordId: int

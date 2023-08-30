@@ -8,5 +8,5 @@ class AddAllianceToDiscordDTO(DTO):
     Request sent to add alliances to a Discord server.
     """
 
-    discord_id: int
+    discordId: int
     alliances: List[str]
