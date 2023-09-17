@@ -13,6 +13,7 @@ class WarDTO(DTO):
     opponent: AllianceNameDTO 
     alliancePoints: int 
     opponentPoints: int 
+    respawnTimer: int
     status: str
     startTimestamp: int
 

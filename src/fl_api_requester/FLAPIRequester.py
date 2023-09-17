@@ -20,6 +20,7 @@ from .dto.request.player.RemovePlayerDTO import RemovePlayerDTO
 from .dto.request.player.SetAllianceDTO import SetAllianceDTO
 from .dto.request.player.SetPlayerRolesDTO import SetPlayerRolesDTO
 from .dto.request.war.StartWarDTO import StartWarDTO
+from .dto.request.war.SetRespawnTimerDTO import SetRespawnTimerDTO
 from .dto.request.war.StopWarDTO import StopWarDTO
 from .dto.request.war.WarAttackRequestDTO import WarAttackRequestDTO
 from .dto.response.alliance.AllianceDTO import AllianceDTO
@@ -112,16 +113,19 @@ class FLAPIRequester:
     def start_war(self, war_data: StartWarDTO) -> WarDTO:
         return from_dict(WarDTO, self.__send_request("/war/start", "POST", war_data))
     
+    def set_respawn_timer(self, respawn_timer: SetRespawnTimerDTO)  -> WarDTO:
+        return from_dict(WarDTO, self.__send_request("/war/set-respawn-timer", "POST", respawn_timer))
+    
     def stop_war(self, war_data: StopWarDTO) -> WarDTO:
         return from_dict(WarDTO, self.__send_request("/war/stop", "POST", war_data))
     
     def attack(self, attack_data: WarAttackRequestDTO) -> WarAttackResponseDTO:
         return from_dict(WarAttackResponseDTO, self.__send_request("/war/attack", "POST", attack_data))
     
-    def get_player_attacks(self, nickname: str) -> List[WarAttackResponseDTO]:
+    def get_player_attacks(self, nickname: str, minTimestamp: int = 0) -> List[WarAttackResponseDTO]:
         return [
             from_dict(WarAttackResponseDTO, attack) 
-            for attack in self.__send_request(f"/war/attacks/{nickname}")
+            for attack in self.__send_request(f"/war/attacks/{nickname}?minTimestamp={minTimestamp}")
         ]
 
     ###########
